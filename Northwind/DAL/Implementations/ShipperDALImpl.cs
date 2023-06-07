@@ -11,7 +11,7 @@ namespace DAL.Implementations
 {
     public class ShipperDALImpl : IShipperDAL
     {
-        private NorthwindContext _northWindContext;
+        private northwndContext _northWindContext;
         private UnidadDeTrabajo<Shipper> unidad;
 
         public bool Add(Shipper entity)
@@ -32,7 +32,7 @@ namespace DAL.Implementations
         public Shipper Get(int id)
         {
             Shipper shipper = null;
-            using (unidad = new UnidadDeTrabajo<Shipper>(new NorthwindContext()))
+            using (unidad = new UnidadDeTrabajo<Shipper>(new northwndContext()))
             {
                 shipper = unidad.genericDAL.Get(id);
             }
@@ -42,7 +42,7 @@ namespace DAL.Implementations
         public IEnumerable<Shipper> GetAll()
         {
             IEnumerable<Shipper> shippers = null;
-            using (unidad = new UnidadDeTrabajo<Shipper>(new NorthwindContext()))
+            using (unidad = new UnidadDeTrabajo<Shipper>(new northwndContext()))
             {
                 shippers = unidad.genericDAL.GetAll();
             }
