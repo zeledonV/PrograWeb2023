@@ -1,8 +1,10 @@
 ﻿using DAL.Implementations;
+using BackEnd.Models;
 using DAL.Interfaces;
 using Entities.Entities;
 using Microsoft.AspNetCore.Mvc;
 
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace BackEnd.Controllers
 {
@@ -12,26 +14,53 @@ namespace BackEnd.Controllers
     {
         private IShipperDAL shipperDAL;
 
+        private ShipperModel Convertir(Shipper shipper)
+        {
+            return new ShipperModel
+            {
+                ShipperId = shipper.ShipperId,
+                CompanyName = shipper.CompanyName,
+                Phone = shipper.Phone
+            };
+        }
+
+        private Shipper Convertir(ShipperModel shipper)
+        {
+            return new Shipper
+            {
+                ShipperId = shipper.ShipperId,
+                CompanyName = shipper.CompanyName,
+                Phone = shipper.Phone
+            };
+        }
+
         public ShipperController()
         {
             shipperDAL = new ShipperDALImpl();
 
         }
+
         #region Consultas
         // GET: api/<ShipperController>
         [HttpGet]
-        public JsonResult Get()
+        public async Task<JsonResult> Get()
         {
-            IEnumerable<Shipper> shippers = shipperDAL.GetAll();
-            return new JsonResult(shippers);
+            IEnumerable<Shipper> shippers = await shipperDAL.GetAll();
+            List<ShipperModel> models = new List<ShipperModel>();
+
+            foreach (var shipper in shippers)
+            {
+                models.Add(Convertir(shipper));
+            }
+            return new JsonResult(models);
         }
 
         // GET api/<ShipperController>/5
         [HttpGet("{id}")]
-        public JsonResult Get(int id)
+        public async Task<JsonResult> Get(int id)
         {
-            Shipper shipper = shipperDAL.Get(id);
-            return new JsonResult(shipper);
+            Shipper shipper = await shipperDAL.Get(id);
+            return new JsonResult(Convertir(shipper));
         }
 
         #endregion
@@ -39,8 +68,10 @@ namespace BackEnd.Controllers
         #region Agregar
         // POST api/<ShipperController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public JsonResult Post([FromBody] ShipperModel shipper)
         {
+            shipperDAL.Add(Convertir(shipper));
+            return new JsonResult(shipper);
         }
 
         #endregion
@@ -48,9 +79,11 @@ namespace BackEnd.Controllers
         #region Modificar
 
         // PUT api/<ShipperController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut]
+        public JsonResult Put([FromBody] ShipperModel shipper)
         {
+            shipperDAL.Update(Convertir(shipper));
+            return new JsonResult(shipper);
         }
 
         #endregion
@@ -60,6 +93,11 @@ namespace BackEnd.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            Shipper shipper = new Shipper
+            {
+                ShipperId = id
+            };
+            shipperDAL.Remove(shipper);
         }
 
         #endregion

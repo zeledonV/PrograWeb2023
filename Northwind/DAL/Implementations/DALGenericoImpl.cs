@@ -12,8 +12,8 @@ namespace DAL.Implementations
 {
     public class DALGenericoImpl<TEntity> : IDALGenerico<TEntity> where TEntity : class
     {
-        protected readonly northwndContext Context;
-        public DALGenericoImpl(northwndContext context)
+        protected readonly NorthwindContext Context;
+        public DALGenericoImpl(NorthwindContext context)
         {
             Context = context;
         }
@@ -21,7 +21,6 @@ namespace DAL.Implementations
         {
             try
             {
-
                 Context.Set<TEntity>().Add(entity);
                 return true;
             }
@@ -58,11 +57,11 @@ namespace DAL.Implementations
             }
         }
 
-        public TEntity Get(int id)
+        public async Task<TEntity> Get(int id)
         {
             try
             {
-                return Context.Set<TEntity>().Find(id);
+                return await Context.Set<TEntity>().FindAsync(id);
             }
             catch (Exception)
             {
@@ -71,11 +70,11 @@ namespace DAL.Implementations
             }
         }
 
-        public IEnumerable<TEntity> GetAll()
+        public async Task<IEnumerable<TEntity>> GetAll()
         {
             try
             {
-                return Context.Set<TEntity>().ToList();
+                return await Context.Set<TEntity>().ToListAsync();
             }
             catch (Exception)
             {

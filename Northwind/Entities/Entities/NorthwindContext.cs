@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Entities.Entities
 {
-    public partial class northwndContext : DbContext
+    public partial class NorthwindContext : DbContext
     {
-        public northwndContext()
+        public NorthwindContext()
         {
         }
 
-        public northwndContext(DbContextOptions<northwndContext> options)
+        public NorthwindContext(DbContextOptions<NorthwindContext> options)
             : base(options)
         {
         }
@@ -43,12 +43,12 @@ namespace Entities.Entities
         public virtual DbSet<SummaryOfSalesByYear> SummaryOfSalesByYears { get; set; } = null!;
         public virtual DbSet<Supplier> Suppliers { get; set; } = null!;
         public virtual DbSet<Territory> Territories { get; set; } = null!;
+        public virtual DbSet<SP_GetAllShippers_Result> SP_GetAllShippers_Results { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseSqlServer("Server=DESKTOP-VNC4VR0\\SQLEXPRESS;Database=northwnd;Integrated Security=True;Trusted_Connection=True;");
             }
         }
